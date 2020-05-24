@@ -1,12 +1,22 @@
 package com.nesh.waitingloungeadmin;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.view.Menu;
@@ -27,7 +37,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
@@ -35,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore fs;
     String pname;
     ListView lv;
-    List<String> email=new ArrayList<>();
+    List<String> waitingTime=new ArrayList<>();
     ArrayAdapter<String> adapter;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -74,9 +87,9 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if(task.isSuccessful()){
-                                    email.clear();
+                                    waitingTime.clear();
                                     for(QueryDocumentSnapshot post:task.getResult()){
-                                        email.add(post.getId());
+                                        waitingTime.add(post.getId());
                                     }
                                     adapter.notifyDataSetChanged();
                                 }
@@ -86,35 +99,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         lv=(ListView)findViewById(R.id.listDisplay);
-        adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,email);
+        adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,waitingTime);
         lv.setAdapter(adapter);
-        mAuth=FirebaseAuth.getInstance();
-        String user=mAuth.getCurrentUser().getEmail();
-        fs=FirebaseFirestore.getInstance();
-        fs.collection("Users_Cust").document(user).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot post=task.getResult();
-                        try{
-                            JSONObject js=new JSONObject(post.getData());
-                            pname=js.getString("Property_Name");
-                            Toast.makeText(getApplicationContext(),pname,Toast.LENGTH_LONG).show();
-                            fs.collection(pname).get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if(task.isSuccessful()){
-                                                email.clear();
-                                                for(QueryDocumentSnapshot post:task.getResult()){
-                                                    email.add(post.getId());
-                                                }
-                                                adapter.notifyDataSetChanged();
-                                            }
-                                        }
-                                    });
-                        }catch(Exception e){}
-                    }
-                });
+       Timer t= new Timer();
+       t.scheduleAtFixedRate(new TimerTask() {
+           @RequiresApi(api = Build.VERSION_CODES.O)
+           @Override
+           public void run() {
+               dataQuery();
+           }
+       },0,60000);
+     }
+     public void dataQuery(){
+         mAuth=FirebaseAuth.getInstance();
+         String user=mAuth.getCurrentUser().getEmail();
+         fs=FirebaseFirestore.getInstance();
+         fs.collection("Users_Cust").document(user).get()
+                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                     @Override
+                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                         DocumentSnapshot post=task.getResult();
+                         try{
+                             JSONObject js=new JSONObject(post.getData());
+                             pname=js.getString("Property_Name");
+                             Toast.makeText(getApplicationContext(),pname,Toast.LENGTH_LONG).show();
+                             fs.collection(pname).get()
+                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                         @Override
+                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                             if(task.isSuccessful()){
+                                                 waitingTime.clear();
+                                                 for(QueryDocumentSnapshot post:task.getResult()){
+                                                     waitingTime.add(post.getId());
+                                                 }
+                                                 adapter.notifyDataSetChanged();
+                                             }
+                                         }
+                                     });
+                         }catch(Exception e){}
+                     }
+                 });
      }
 }
