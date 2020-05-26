@@ -87,7 +87,7 @@
                     android:layout_marginTop="10dp"
                     android:ems="10"
                     android:fontFamily="serif"
-                    android:hint="Property Name"
+                    android:hint="Business Name"
                     android:inputType="textPersonName"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

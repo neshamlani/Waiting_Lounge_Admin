@@ -9,7 +9,8 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/profileRefersh"
         android:layout_width="match_parent"
-        android:layout_height="513dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="90dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,9 +19,8 @@
         <androidx.gridlayout.widget.GridLayout
             android:id="@+id/gridDisplay"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="50dp"
-            android:padding="40dp"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
             app:columnCount="2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +45,26 @@
                 android:textSize="18sp" />
 
             <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="serif"
+                android:text="Business Name:"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/businessName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="serif"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <TextView
                 android:id="@+id/textView14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,11 +76,12 @@
 
             <TextView
                 android:id="@+id/displayEmail"
-                android:layout_width="wrap_content"
+                android:layout_width="227dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="serif"
+                android:isScrollContainer="false"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
@@ -126,6 +147,17 @@
             app:layout_constraintStart_toEndOf="@+id/displayPhoto"
             app:layout_constraintTop_toBottomOf="@+id/displayPhoto"
             app:srcCompat="@android:drawable/ic_menu_camera" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="40dp"
+        android:onClick="editProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileRefersh"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

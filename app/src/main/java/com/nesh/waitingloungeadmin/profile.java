@@ -26,8 +26,8 @@ import org.json.JSONObject;
 public class profile extends AppCompatActivity {
     FirebaseFirestore fs;
     FirebaseAuth mAuth;
-    TextView displayName,displayEmail,displayNumber,displayAddress;
-    String name="",email="",url="",number="",address="";
+    TextView displayName,displayEmail,displayNumber,displayAddress,displayBusiness;
+    String name="",email="",url="",number="",address="",business="";
     ImageView im;
     SwipeRefreshLayout spl;
     @Override
@@ -39,6 +39,7 @@ public class profile extends AppCompatActivity {
         displayEmail=(TextView)findViewById(R.id.displayEmail);
         displayNumber=(TextView)findViewById(R.id.displayNumber);
         displayAddress=(TextView)findViewById(R.id.displayAddress);
+        displayBusiness=(TextView)findViewById(R.id.businessName);
         im=(ImageView)findViewById(R.id.displayPhoto);
         spl=(SwipeRefreshLayout)findViewById(R.id.profileRefersh);
         dataQuery();
@@ -73,6 +74,11 @@ public class profile extends AppCompatActivity {
                                 }catch (Exception e){
                                     Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
                                 }
+                                try {
+                                    business = js.getString("Property_Name");
+                                }catch (Exception e){
+                                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                                }
                                 try{
                                     email = js.getString("Email");
                                 }catch (Exception e){
@@ -95,6 +101,7 @@ public class profile extends AppCompatActivity {
                                 }
                             }
                             displayName.setText(name);
+                            displayBusiness.setText(business);
                             displayEmail.setText(email);
                             displayNumber.setText(number);
                             displayAddress.setText(address);
@@ -108,5 +115,10 @@ public class profile extends AppCompatActivity {
                         }
                     }
                 });
+    }
+    public void editProfile(View view){
+        Intent in=new Intent(profile.this,changeProfile.class);
+        startActivity(in);
+        finish();
     }
 }
