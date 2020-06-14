@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent in=new Intent(MainActivity.this,profile.class);
                 startActivity(in);
                 break;
-            case R.id.contact:
+            case R.id.contactus:
                 in=new Intent(MainActivity.this,profile.class);
                 startActivity(in);
                 break;
