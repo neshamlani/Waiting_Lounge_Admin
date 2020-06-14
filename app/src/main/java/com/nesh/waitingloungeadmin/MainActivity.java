@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -23,6 +22,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,7 +42,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -77,11 +76,15 @@ public class MainActivity extends AppCompatActivity {
                 mAuth= FirebaseAuth.getInstance();
                 mAuth.signOut();
                 finish();
-                return true;
+                break;
             case R.id.profile:
                 Intent in=new Intent(MainActivity.this,profile.class);
                 startActivity(in);
-                return true;
+                break;
+            case R.id.contact:
+                in=new Intent(MainActivity.this,profile.class);
+                startActivity(in);
+                break;
         }
         return true;
     }
@@ -101,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
         }
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},2);
+        }
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.SEND_SMS)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.SEND_SMS},3);
         }
         swipe=(SwipeRefreshLayout)findViewById(R.id.swipe);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -178,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                                                 notificationChannel.enableLights(true);
                                                 notificationChannel.enableVibration(true);
                                                 notificationChannel.setLightColor(Color.GREEN);
-                                                Intent in=new Intent(MainActivity.this,profile.class);
+                                                Intent in=new Intent(MainActivity.this,MainActivity.class);
                                                 in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                 PendingIntent pendingIntent=PendingIntent.getActivity(getApplicationContext(),1970,in,PendingIntent.FLAG_ONE_SHOT);
                                                 Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -202,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
                                                 notificationChannel.enableLights(true);
                                                 notificationChannel.enableVibration(true);
                                                 notificationChannel.setLightColor(Color.GREEN);
-                                                in=new Intent(MainActivity.this,profile.class);
+                                                in=new Intent(MainActivity.this,MainActivity.class);
                                                 in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                 pendingIntent=PendingIntent.getActivity(getApplicationContext(),1971,in,PendingIntent.FLAG_ONE_SHOT);
                                                 soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -256,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
      public void nextCustomer(View view){
+        final List<String> num=new ArrayList<>();
          fs=FirebaseFirestore.getInstance();
          fs.collection(pname).get()
                  .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -264,6 +271,12 @@ public class MainActivity extends AppCompatActivity {
                          removeCust.clear();
                         for(QueryDocumentSnapshot post:task.getResult()){
                             removeCust.add(post.getId());
+                            try {
+                                JSONObject js=new JSONObject(post.getData());
+                                num.add(js.getString("Number"));
+                            } catch (JSONException ex) {
+                                ex.printStackTrace();
+                            }
                         }
                          fs=FirebaseFirestore.getInstance();
                          String remove=removeCust.get(0);
@@ -272,6 +285,9 @@ public class MainActivity extends AppCompatActivity {
                                      .addOnCompleteListener(new OnCompleteListener<Void>() {
                                          @Override
                                          public void onComplete(@NonNull Task<Void> task) {
+                                             String numForCurrentCust="+91"+num.get(0);
+                                             SmsManager sms=SmsManager.getDefault();
+                                             sms.sendTextMessage(numForCurrentCust,null,"Your Turn Is Arrived",null,null);
                                              Toast.makeText(getApplicationContext(), "Current Customer Is Removed", Toast.LENGTH_LONG).show();
                                              runOnUiThread(new Runnable() {
                                                  @Override
