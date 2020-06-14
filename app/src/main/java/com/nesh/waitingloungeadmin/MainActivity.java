@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(in);
                 break;
             case R.id.contactus:
-                in=new Intent(MainActivity.this,profile.class);
+                in=new Intent(MainActivity.this,aboutus.class);
                 startActivity(in);
                 break;
         }
