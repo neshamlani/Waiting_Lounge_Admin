@@ -54,21 +54,12 @@
                 android:inputType="textPersonName" />
 
             <EditText
-                android:id="@+id/editEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:hint="Enter Email"
-                android:inputType="textPersonName" />
-
-            <EditText
                 android:id="@+id/editNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:ems="10"
-                android:hint="Enter Number With Country Code"
+                android:hint="Enter Number With Out Country Code"
                 android:inputType="phone" />
 
             <EditText

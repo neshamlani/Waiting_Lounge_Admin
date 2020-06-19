@@ -122,7 +122,10 @@ public class MainActivity extends AppCompatActivity {
                                 for(QueryDocumentSnapshot post:task.getResult()){
                                     JSONObject js=new JSONObject(post.getData());
                                     try {
-                                        time.add("Time:"+js.getString("Time")+"  Token:"+js.getString("Token")+"  Sr.No."+js.getString("Token"));
+                                        time.add("Time:"+js.getString("Time")
+                                                +"  Token:"+js.getString("Token")
+                                                +"  Sr.No."+js.getString("Token")
+                                                +"  Number:"+js.getString("Number"));
                                     } catch (JSONException ex) {
                                         ex.printStackTrace();
                                     }
