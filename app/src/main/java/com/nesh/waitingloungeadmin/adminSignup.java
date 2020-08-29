@@ -60,8 +60,6 @@ public class adminSignup extends AppCompatActivity {
         categ.clear();
         categ.add("Hotel");
         categ.add("Barber");
-        categ.add("Clinic");
-        categ.add("Dentist");
         adapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,categ);
         sp.setAdapter(adapter);
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

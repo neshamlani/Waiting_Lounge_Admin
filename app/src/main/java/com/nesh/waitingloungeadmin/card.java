@@ -15,18 +15,16 @@ import java.util.List;
 public class card extends RecyclerView.Adapter<card.cardViewHolder>{
     List<String> name=new ArrayList<>();
     List<String> timedisp=new ArrayList<>();
+    List<String> tok=new ArrayList<>();
+    List<String> srno=new ArrayList<>();
+    List<String> num=new ArrayList<>();
 
-    public card(List<String> name, List<String> timeDisp) {
+    public card(List<String> name, List<String> timedisp, List<String> tok, List<String> srno, List<String> num) {
         this.name = name;
-        this.timedisp = timeDisp;
-    }
-
-    public List<String> getName() {
-        return name;
-    }
-
-    public List<String> getTimedisp() {
-        return timedisp;
+        this.timedisp = timedisp;
+        this.tok = tok;
+        this.srno = srno;
+        this.num = num;
     }
 
     @NonNull
@@ -41,6 +39,9 @@ public class card extends RecyclerView.Adapter<card.cardViewHolder>{
     public void onBindViewHolder(@NonNull cardViewHolder holder, int position) {
         holder.listName.setText(name.get(position));
         holder.listTime.setText(timedisp.get(position));
+        holder.listsrno.setText(srno.get(position));
+        holder.listNum.setText(num.get(position));
+        holder.listTok.setText(tok.get(position));
     }
 
     @Override
@@ -55,12 +56,15 @@ public class card extends RecyclerView.Adapter<card.cardViewHolder>{
 
     public static class cardViewHolder extends RecyclerView.ViewHolder{
         CardView cv;
-        TextView listName,listTime;
+        TextView listName,listTime,listNum,listsrno,listTok;
         public cardViewHolder(@NonNull View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cardDisplay);
             listName=(TextView)itemView.findViewById(R.id.listName);
             listTime=(TextView)itemView.findViewById(R.id.listTime);
+            listNum=(TextView)itemView.findViewById(R.id.listnum);
+            listsrno=(TextView)itemView.findViewById(R.id.sr);
+            listTok=(TextView)itemView.findViewById(R.id.listtoken);
         }
     }
 }

@@ -2,5 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/profile" android:title="Profile"/>
     <item android:id="@+id/contactus" android:title="About Us"/>
+    <item android:title="Terms Of Use" android:id="@+id/termsandconditions"/>
     <item android:id="@+id/logout" android:title="Logout"/>
 </menu>

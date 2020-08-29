@@ -57,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
     String pname;
     List<String> name;
     List<String> time;
+    List<String> srno;
+    List<String> num;
+    List<String> tok;
     List<String> removeCust;
     card c;
     ListenerRegistration registration;
@@ -81,6 +84,12 @@ public class MainActivity extends AppCompatActivity {
                 Intent in=new Intent(MainActivity.this,profile.class);
                 startActivity(in);
                 break;
+
+            case R.id.termsandconditions:
+                in=new Intent(MainActivity.this,termsandconditions.class);
+                startActivity(in);
+                break;
+
             case R.id.contactus:
                 in=new Intent(MainActivity.this,aboutus.class);
                 startActivity(in);
@@ -117,20 +126,36 @@ public class MainActivity extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                time.clear();
                                 name.clear();
+                                time.clear();
+                                srno.clear();
+                                tok.clear();
+                                num.clear();
                                 for(QueryDocumentSnapshot post:task.getResult()){
                                     JSONObject js=new JSONObject(post.getData());
                                     try {
-                                        time.add("Time:"+js.getString("Time")
-                                                +"  Token:"+js.getString("Token")
-                                                +"  Sr.No."+js.getString("Token")
-                                                +"  Number:"+js.getString("Number"));
+                                        removeCust.add(js.getString("Time"));
+                                        time.add("Time:"+js.getString("Time"));
                                     } catch (JSONException ex) {
                                         ex.printStackTrace();
                                     }
                                     try {
                                         name.add(js.getString("Email"));
+                                    } catch (JSONException ex) {
+                                        ex.printStackTrace();
+                                    }
+                                    try {
+                                        tok.add("Token:"+js.getString("Token"));
+                                    } catch (JSONException ex) {
+                                        ex.printStackTrace();
+                                    }
+                                    try {
+                                        num.add("Number:+91"+js.getString("Number"));
+                                    } catch (JSONException ex) {
+                                        ex.printStackTrace();
+                                    }
+                                    try {
+                                        srno.add("Serial No."+js.getString("Token"));
                                     } catch (JSONException ex) {
                                         ex.printStackTrace();
                                     }
@@ -143,11 +168,14 @@ public class MainActivity extends AppCompatActivity {
         });
         name=new ArrayList<>();
         time=new ArrayList<>();
+        srno=new ArrayList<>();
+        tok=new ArrayList<>();
+        num=new ArrayList<>();
         removeCust=new ArrayList<>();
         rv=findViewById(R.id.recyclerView);
         LinearLayoutManager lm=new LinearLayoutManager(this);
         rv.setLayoutManager(lm);
-        c=new card(name,time);
+        c=new card(name,time,tok,srno,num);
         rv.setAdapter(c);
         mAuth=FirebaseAuth.getInstance();
         String user=mAuth.getCurrentUser().getEmail();
@@ -162,6 +190,9 @@ public class MainActivity extends AppCompatActivity {
                             pname=js.getString("Property_Name");
                             name.clear();
                             time.clear();
+                            srno.clear();
+                            tok.clear();
+                            num.clear();
                             Query q=fs.collection(pname);
                             registration=q.addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -174,12 +205,27 @@ public class MainActivity extends AppCompatActivity {
                                                 JSONObject js=new JSONObject(dc.getDocument().getData());
                                                 try {
                                                     removeCust.add(js.getString("Time"));
-                                                    time.add("Time:"+js.getString("Time")+"  Token:"+js.getString("Token")+"  Sr.No."+js.getString("Token"));
+                                                    time.add("Time:"+js.getString("Time"));
                                                 } catch (JSONException ex) {
                                                     ex.printStackTrace();
                                                 }
                                                 try {
                                                     name.add(js.getString("Email"));
+                                                } catch (JSONException ex) {
+                                                    ex.printStackTrace();
+                                                }
+                                                try {
+                                                    tok.add("Token:"+js.getString("Token"));
+                                                } catch (JSONException ex) {
+                                                    ex.printStackTrace();
+                                                }
+                                                try {
+                                                    num.add("Number:+91"+js.getString("Number"));
+                                                } catch (JSONException ex) {
+                                                    ex.printStackTrace();
+                                                }
+                                                try {
+                                                    srno.add("Serial No."+js.getString("Token"));
                                                 } catch (JSONException ex) {
                                                     ex.printStackTrace();
                                                 }
@@ -231,17 +277,36 @@ public class MainActivity extends AppCompatActivity {
                                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                time.clear();
                                                                 name.clear();
+                                                                time.clear();
+                                                                srno.clear();
+                                                                tok.clear();
+                                                                num.clear();
                                                                 for(QueryDocumentSnapshot post:task.getResult()){
                                                                     JSONObject js=new JSONObject(post.getData());
                                                                     try {
-                                                                        time.add("Time:"+js.getString("Time")+"  Token:"+js.getString("Token")+"  Sr.No."+js.getString("Token"));
+                                                                        removeCust.add(js.getString("Time"));
+                                                                        time.add("Time:"+js.getString("Time"));
                                                                     } catch (JSONException ex) {
                                                                         ex.printStackTrace();
                                                                     }
                                                                     try {
                                                                         name.add(js.getString("Email"));
+                                                                    } catch (JSONException ex) {
+                                                                        ex.printStackTrace();
+                                                                    }
+                                                                    try {
+                                                                        tok.add("Token:"+js.getString("Token"));
+                                                                    } catch (JSONException ex) {
+                                                                        ex.printStackTrace();
+                                                                    }
+                                                                    try {
+                                                                        num.add("Number:+91"+js.getString("Number"));
+                                                                    } catch (JSONException ex) {
+                                                                        ex.printStackTrace();
+                                                                    }
+                                                                    try {
+                                                                        srno.add("Serial No."+js.getString("Token"));
                                                                     } catch (JSONException ex) {
                                                                         ex.printStackTrace();
                                                                     }
@@ -300,22 +365,38 @@ public class MainActivity extends AppCompatActivity {
                                                              .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                                  @Override
                                                                  public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                     time.clear();
                                                                      name.clear();
-                                                                     int i = 0;
+                                                                     time.clear();
+                                                                     srno.clear();
+                                                                     tok.clear();
+                                                                     num.clear();
+
                                                                      for (QueryDocumentSnapshot post : task.getResult()) {
-                                                                         i++;
-                                                                         JSONObject js = new JSONObject(post.getData());
-                                                                         Map<String, Object> data = new HashMap<>();
-                                                                         data.put("Token", i);
-                                                                         fs.collection(pname).document(post.getId()).set(data, SetOptions.merge());
+
+                                                                         JSONObject js=new JSONObject(post.getData());
                                                                          try {
-                                                                             time.add("Time:" + js.getString("Time") + "  Token:" + js.getString("Token") + "  Sr.No." + js.getString("Token"));
+                                                                             removeCust.add(js.getString("Time"));
+                                                                             time.add("Time:"+js.getString("Time"));
                                                                          } catch (JSONException ex) {
                                                                              ex.printStackTrace();
                                                                          }
                                                                          try {
                                                                              name.add(js.getString("Email"));
+                                                                         } catch (JSONException ex) {
+                                                                             ex.printStackTrace();
+                                                                         }
+                                                                         try {
+                                                                             tok.add("Token:"+js.getString("Token"));
+                                                                         } catch (JSONException ex) {
+                                                                             ex.printStackTrace();
+                                                                         }
+                                                                         try {
+                                                                             num.add("Number:+91"+js.getString("Number"));
+                                                                         } catch (JSONException ex) {
+                                                                             ex.printStackTrace();
+                                                                         }
+                                                                         try {
+                                                                             srno.add("Serial No."+js.getString("Token"));
                                                                          } catch (JSONException ex) {
                                                                              ex.printStackTrace();
                                                                          }
