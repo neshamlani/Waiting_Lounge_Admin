@@ -129,7 +129,7 @@ public class adminSignup extends AppCompatActivity {
         }
     }
     public void updateData(){
-        Map<String, Object> data=new HashMap<>();
+        final Map<String, Object> data=new HashMap<>();
         fs=FirebaseFirestore.getInstance();
         //String key=Long.toString(System.currentTimeMillis());
         data.put(email,propertyName);
@@ -148,6 +148,13 @@ public class adminSignup extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 Toast.makeText(getApplicationContext(),"Redirecting",Toast.LENGTH_SHORT).show();
                 pbAdminSign.setVisibility(View.GONE);
+                data.clear();
+                data.put("Email",email);
+                fs.collection(type).document(propertyName).set(data,SetOptions.merge());
+                data.clear();
+                data.put("Email",email);
+                data.put("Property_Name",propertyName);
+                fs.collection("Shop").document(propertyName).set(data,SetOptions.merge());
                 finish();
             }
         })
@@ -157,8 +164,5 @@ public class adminSignup extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
                     }
                 });
-        data.clear();
-        data.put("Email",email);
-        fs.collection(type).document(propertyName).set(data,SetOptions.merge());
     }
 }
